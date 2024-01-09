@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
     // const [cartUpdateFlag, setCartUpdateFlag] = useState(false);
     // const [cart, setCart] = useState([]);
     // const [products, setProducts] = useState([]);
-    const [cartUpdateFlag, setCartUpdateFlag] = useState(false);
+
 
   const initialProducts = [
     { id: 1, name: 'Image 1', price: 10, quantity: 0, image: image1 },
@@ -36,9 +36,9 @@ export const CartProvider = ({ children }) => {
     { id: 10, name: 'Image 2', price: 15, quantity: 0, image: image10 },
   ];
 
-  const [cart, setCart] = useState(initialCart);
-
+const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
   const [products, setProducts] = useState(JSON.parse(localStorage.getItem('products')) || []);
+  const [cartUpdateFlag, setCartUpdateFlag] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -47,6 +47,9 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));
   }, [products]);
+
+
+
 
   const addToCart = (item) => {
     const existingItem = cart.find((cartItem) => cartItem.id === item.id);

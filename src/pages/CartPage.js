@@ -64,7 +64,7 @@ const CartPage = () => {
             onClick={handleContinueShopping}
             className="product-item button"
           >
-            Continue Shopping
+            Return to Home Page..!
           </button>
         </Link>
         <button onClick={handlePay} className="product-item button">
