@@ -17,8 +17,11 @@ const CartContext = createContext();
 
 
 export const CartProvider = ({ children }) => {
-  const initialCart = JSON.parse(localStorage.getItem('cart')) || [];
-  const [cart, setCart] = useState(initialCart);
+    const initialCart = JSON.parse(localStorage.getItem('cart')) || [];
+    // const [cartUpdateFlag, setCartUpdateFlag] = useState(false);
+    // const [cart, setCart] = useState([]);
+    // const [products, setProducts] = useState([]);
+    const [cartUpdateFlag, setCartUpdateFlag] = useState(false);
 
   const initialProducts = [
     { id: 1, name: 'Image 1', price: 10, quantity: 0, image: image1 },
@@ -33,8 +36,9 @@ export const CartProvider = ({ children }) => {
     { id: 10, name: 'Image 2', price: 15, quantity: 0, image: image10 },
   ];
 
+  const [cart, setCart] = useState(initialCart);
 
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState(JSON.parse(localStorage.getItem('products')) || []);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -73,19 +77,28 @@ export const CartProvider = ({ children }) => {
   const removePurchasedItemsFromHome = () => {
     // Identify the IDs of purchased items
     const purchasedItemIds = cart.map((item) => item.id);
-
+  
     // Remove purchased items from the products state
     const updatedProducts = products.filter((product) => !purchasedItemIds.includes(product.id));
-
+  
+    // Update the products state
+    updateProducts(updatedProducts);
+  };
+  
+  
+  const updateProducts = (updatedProducts) => {
     setProducts(updatedProducts);
+    // Trigger a re-render by updating the flag
+    setCartUpdateFlag((prevFlag) => !prevFlag);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, removePurchasedItemsFromHome }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, removePurchasedItemsFromHome, updateProducts, products, cartUpdateFlag, setCartUpdateFlag }}>
       {children}
     </CartContext.Provider>
   );
 };
+
 
 export const useCart = () => {
   const context = useContext(CartContext);

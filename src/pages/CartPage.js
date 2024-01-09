@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Grid, Typography, Container } from "@mui/material";
 import "./Homepage.css";
+import { useEffect } from "react";
 
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, removePurchasedItemsFromHome } =
@@ -21,17 +22,25 @@ const CartPage = () => {
     const confirmation = window.prompt(
       "Are you sure you want to buy these images? (Yes/No)"
     );
-
+  
     if (confirmation && confirmation.toLowerCase() === "yes") {
       window.alert("Congratulations! The images belong to you.");
-
+  
+      // Clear the cart first
+      clearCart();
+  
       // Remove purchased items from Home page
       removePurchasedItemsFromHome();
-      clearCart();
+
     } else {
       window.alert("Payment cancelled. The images are still in your cart.");
     }
   };
+  
+  
+  
+
+  
 
   return (
     <Grid>
